@@ -11,6 +11,7 @@ namespace AutoMapperProfiles
         {
             CreateMap<Character, GetCharacterDto>();
             CreateMap<AddChatacterDto, Character>();
+            CreateMap<UpdateCharacterDto, Character>();
         }
     }
 }
