@@ -1,6 +1,5 @@
-
 using Microsoft.AspNetCore.Mvc;
-using Models;
+using Services;
 
 namespace Controllers
 {
@@ -8,22 +7,28 @@ namespace Controllers
     [Route("api/[controller]")]
     public class CharacterController : ControllerBase
     {
-        private static List<Character> characters = new List<Character>
-        {
-            new Character(),
-            new Character {id = 1,Name = "Jhon"}
-        };
+        private readonly ICharacterService _characterService;
 
+        public CharacterController(ICharacterService characterService)
+        {
+            _characterService = characterService;
+        }
 
         [HttpGet("GetAll")]
-        public ActionResult<List<Character>> Get()
+        public async Task<ActionResult<ServiceResponse<List<Character>>>> Get()
         {
-            return Ok(characters);
+            return Ok(await _characterService.GetAllCharacters());
         }
         [HttpGet("{id}")]
-        public ActionResult<Character> GetSingle(int id)
+        public async Task<ActionResult<ServiceResponse<Character>>> GetSingle(int id)
         {
-            return Ok(characters.FirstOrDefault(c => c.id == id));
+            return Ok(await _characterService.GetCharacterById(id));
+        }
+        [HttpPost]
+        public async Task<ActionResult<ServiceResponse<List<Character>>>> AddCharacter(Character newCharacter)
+        {
+
+            return Ok(await _characterService.AddCharacter(newCharacter));
         }
     }
 }
